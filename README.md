@@ -24,4 +24,14 @@ A full-stack task management application built with the MERN stack.
 ## Roadmap
 
 - [x] Day 1: Repository foundation
-- [ ] Day 2: Express server setup
+- [x] Day 2: Express backend foundation
+- [ ] Day 3: MongoDB connection and Task model
+
+## Running the server
+
+    cd server
+    npm install
+    cp .env.example .env
+    npm run dev
+
+Health check: http://localhost:5000/api/health
