@@ -34,4 +34,4 @@ A full-stack task management application built with the MERN stack.
     cp .env.example .env
     npm run dev
 
-Health check: http://localhost:5000/api/health
+Health check(with the server running locally): http://localhost:5000/api/health
