@@ -16,6 +16,37 @@ A full-stack task management application built with the MERN stack.
     ├── server/   # Express REST API
     ├── cli/      # Node.js CLI
     └── docs/     # Documentation
+## System Architecture
+graph TD
+    %% Users and Interfaces
+    User([Web User]) -->|Interacts with| Client[React Frontend]
+    Dev([Power User / Dev]) -->|Runs commands| CLI[Node.js CLI]
+
+    %% Core Application
+    subgraph backend [Server Architecture]
+        Server[Express REST API]
+        Auth[Auth Middleware]
+        Routes[API Routes]
+        Controllers[Controllers]
+        
+        Server --> Auth
+        Auth --> Routes
+        Routes --> Controllers
+    end
+
+    %% Connections
+    Client -->|HTTP Requests / JSON| Server
+    CLI -->|HTTP Requests / JWT Auth| Server
+
+    %% Data Layer
+    subgraph data [Data Layer]
+        DB[(Database)]
+        Cache[(Redis Cache)]
+    end
+
+    Controllers -->|Read/Write| DB
+    Controllers -->|Query/Store| Cache
+
 
 ## Status
 
