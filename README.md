@@ -27,7 +27,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 2: Express backend foundation
 - [x] Day 3: MongoDB Atlas connection
 - [x] Day 4: Task model
-- [ ] Day 5: Task CRUD API
+- [x] Day 5: Create task API
+- [ ] Day 6: Read, update, delete tasks
 
 ## Running the server
 
