@@ -25,13 +25,19 @@ A full-stack task management application built with the MERN stack.
 
 - [x] Day 1: Repository foundation
 - [x] Day 2: Express backend foundation
-- [ ] Day 3: MongoDB connection and Task model
+- [x] Day 3: MongoDB Atlas connection
+- [ ] Day 4: Task model and CRUD API
 
 ## Running the server
 
     cd server
     npm install
     cp .env.example .env
+    # fill in MONGODB_URI and JWT_SECRET in .env
     npm run dev
 
-Health check(with the server running locally): http://localhost:5000/api/health
+Health check (server must be running locally): `http://localhost:5000/api/health`
+
+Example response:
+
+    {"success":true,"message":"TaskFlow API is running","database":"connected"}
