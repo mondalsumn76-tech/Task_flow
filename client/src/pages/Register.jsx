@@ -39,7 +39,7 @@ export default function Register() {
     >
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         {error && (
-          <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+          <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
             {error}
           </p>
         )}
