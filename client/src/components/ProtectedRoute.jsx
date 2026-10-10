@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
+import { useAuth } from '../context/authContextValue.js';
 import Spinner from './Spinner.jsx';
 
 // Logged out -> /login. Waits for the session check first, so a refresh

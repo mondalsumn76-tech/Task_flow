@@ -42,7 +42,7 @@ export const updateTask = async (userId, taskId, data) => {
   const task = await Task.findOneAndUpdate(
     { _id: taskId, user: userId },
     { $set: data },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
   if (!task) throw notFound();
   return task;

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-export const BCRYPT_ROUNDS = 12;
+export const BCRYPT_ROUNDS = process.env.NODE_ENV === 'test' ? 4 : 12;
 
 const userSchema = new mongoose.Schema(
   {

@@ -4,6 +4,8 @@ import { env } from '../config/env.js';
 const createLimiter = (limit, message) =>
   rateLimit({
     windowMs: 15 * 60 * 1000,
+    skip: () => env.nodeEnv === 'test',
+    skip: () => env.nodeEnv === 'test',
     limit,
     standardHeaders: 'draft-7',
     legacyHeaders: false,

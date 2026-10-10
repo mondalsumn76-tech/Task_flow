@@ -62,10 +62,13 @@ export default function useTasks() {
   }, []);
 
   useEffect(() => {
+    // Fetching on mount and when filters change is intended here
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
   }, [load]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadStats();
   }, [loadStats]);
 

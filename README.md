@@ -33,7 +33,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 8a: Client auth (Vite, Tailwind, AuthContext)
 - [x] Day 8b: Dashboard and task UI
 - [x] Day 8c: Polish (dark mode, toasts, shortcuts, stats endpoint)
-- [ ] Day 9: Automated tests and CI
+- [x] Day 9: Automated tests and CI
+- [ ] Day 10: Deployment
 
 ## Running the server
 
@@ -96,3 +97,10 @@ Open http://localhost:5173. In development, Vite proxies `/api` to the Express s
 | `n` | New task |
 | `/` | Focus search |
 | `Esc` | Close dialog |
+
+## Testing
+
+    cd server && npm test     # API tests (in-memory MongoDB, no setup needed)
+    cd client && npm test     # component and hook tests
+
+Tests run automatically on every push and pull request via GitHub Actions.

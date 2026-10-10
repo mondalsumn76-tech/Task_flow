@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext.jsx';
-import { useToast } from '../context/ToastContext.jsx';
+import { useAuth } from '../context/authContextValue.js';
+import { useToast } from '../context/toastContextValue.js';
 import useTasks from '../hooks/useTasks.js';
 import useFocusTrap from '../hooks/useFocusTrap.js';
 import DashboardView from '../components/DashboardView.jsx';
