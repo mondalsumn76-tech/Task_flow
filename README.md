@@ -32,7 +32,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 7: Authentication and security
 - [x] Day 8a: Client auth (Vite, Tailwind, AuthContext)
 - [x] Day 8b: Dashboard and task UI
-- [ ] Day 8c: Polish (dark mode, toasts, shortcuts)
+- [x] Day 8c: Polish (dark mode, toasts, shortcuts, stats endpoint)
+- [ ] Day 9: Automated tests and CI
 
 ## Running the server
 
@@ -87,3 +88,11 @@ All `/api/v1/tasks` routes require a session. Each user only ever sees their own
     npm run dev
 
 Open http://localhost:5173. In development, Vite proxies `/api` to the Express server on port 5000, so run both.
+
+## Keyboard shortcuts
+
+| Key | Action |
+|---|---|
+| `n` | New task |
+| `/` | Focus search |
+| `Esc` | Close dialog |

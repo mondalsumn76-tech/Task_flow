@@ -46,3 +46,9 @@ export const deleteTask = async (req, res) => {
 
   res.status(204).send();
 };
+
+export const getTaskStats = async (req, res) => {
+  const stats = await taskService.getTaskStats(req.user.id);
+
+  res.status(200).json({ success: true, data: stats });
+};

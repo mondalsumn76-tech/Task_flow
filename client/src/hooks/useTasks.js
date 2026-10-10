@@ -54,15 +54,8 @@ export default function useTasks() {
 
   const loadStats = useCallback(async () => {
     try {
-      const [todo, inProgress, done] = await Promise.all(
-        ['todo', 'in-progress', 'done'].map((status) => taskService.list({ status, limit: 1 }))
-      );
-      setStats({
-        todo: todo.meta.total,
-        inProgress: inProgress.meta.total,
-        done: done.meta.total,
-        total: todo.meta.total + inProgress.meta.total + done.meta.total,
-      });
+      const res = await taskService.stats();
+      setStats(res.data);
     } catch {
       // Stats are secondary: the task list shows its own error state
     }

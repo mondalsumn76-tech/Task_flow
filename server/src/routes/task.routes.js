@@ -5,6 +5,7 @@ import {
   createTask,
   listTasks,
   getTask,
+  getTaskStats,
   updateTask,
   updateTaskStatus,
   deleteTask,
@@ -13,6 +14,8 @@ import {
 const router = Router();
 
 router.use(protect);
+
+router.get('/stats', getTaskStats);
 
 router.route('/').post(createTask).get(listTasks);
 

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Task } from '../models/Task.js';
 import { AppError } from '../utils/AppError.js';
 
@@ -50,4 +51,18 @@ export const updateTask = async (userId, taskId, data) => {
 export const deleteTask = async (userId, taskId) => {
   const task = await Task.findOneAndDelete({ _id: taskId, user: userId });
   if (!task) throw notFound();
+};
+
+// One aggregation instead of three count queries. The pipeline is scoped to the
+// owner, and aggregate() does not auto-cast ids, so we convert it ourselves.
+export const getTaskStats = async (userId) => {
+  const rows = await Task.aggregate([
+    { $match: { user: new mongoose.Types.ObjectId(userId) } },
+    { $group: { _id: '$status', count: { $sum: 1 } } },
+  ]);
+  const counts = Object.fromEntries(rows.map((r) => [r._id, r.count]));
+  const todo = counts.todo ?? 0;
+  const inProgress = counts['in-progress'] ?? 0;
+  const done = counts.done ?? 0;
+  return { total: todo + inProgress + done, todo, inProgress, done };
 };
