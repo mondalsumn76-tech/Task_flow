@@ -14,7 +14,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 const app = express();
 
 // Behind Render's proxy, trust one hop so rate limiting sees real client IPs
-if (env.isProduction) app.set('trust proxy', 1);
+if (env.isProduction) app.set('trust proxy', env.trustProxyHops);
 
 // Security and logging first
 app.use(helmet());

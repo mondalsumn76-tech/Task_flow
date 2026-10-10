@@ -12,12 +12,12 @@ export const signToken = (userId) =>
 // Pinning the algorithm blocks "alg: none" and algorithm-confusion attacks
 export const verifyToken = (token) => jwt.verify(token, env.jwtSecret, { algorithms: ['HS256'] });
 
-// Production frontend (Vercel) and backend (Render) sit on different sites,
-// so the cookie needs SameSite=None + Secure there. Locally, Lax works.
+// The client proxies /api through its own domain (Vercel rewrite), so the
+// cookie is first-party: SameSite=Lax, plus Secure in production.
 const baseCookieOptions = () => ({
   httpOnly: true,
   secure: env.isProduction,
-  sameSite: env.isProduction ? 'none' : 'lax',
+  sameSite: 'lax',
   path: '/',
 });
 
