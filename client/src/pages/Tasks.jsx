@@ -1,3 +1,2 @@
-export default function Tasks() {
-  return <h1 className="text-2xl font-bold">Tasks</h1>;
-}
+// Same task experience for now; 8c gives this page its own layout.
+export { default } from './Dashboard.jsx';
