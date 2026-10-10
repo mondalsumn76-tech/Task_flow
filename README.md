@@ -31,7 +31,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 6: Read, update, delete tasks
 - [x] Day 7: Authentication and security
 - [x] Day 8a: Client auth (Vite, Tailwind, AuthContext)
-- [ ] Day 8b: Dashboard and task UI
+- [x] Day 8b: Dashboard and task UI
+- [ ] Day 8c: Polish (dark mode, toasts, shortcuts)
 
 ## Running the server
 
