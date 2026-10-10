@@ -56,6 +56,7 @@ export const taskService = {
     ).toString();
     return request(`/tasks${query ? `?${query}` : ''}`);
   },
+  stats: () => request("/tasks/stats"),
   get: (id) => request(`/tasks/${id}`),
   create: (data) => request('/tasks', { method: 'POST', body: data }),
   update: (id, data) => request(`/tasks/${id}`, { method: 'PATCH', body: data }),
