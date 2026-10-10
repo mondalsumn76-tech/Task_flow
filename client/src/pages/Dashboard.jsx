@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useToast } from '../context/ToastContext.jsx';
 import useTasks from '../hooks/useTasks.js';
+import useFocusTrap from '../hooks/useFocusTrap.js';
 import DashboardView from '../components/DashboardView.jsx';
 import TaskForm from '../components/TaskForm.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
 
+const isTyping = (el) =>
+  Boolean(el) && (['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName) || el.isContentEditable);
+
 export default function Dashboard() {
   const { user } = useAuth();
+  const toast = useToast();
   const t = useTasks();
 
   // form: null (closed) | { task: null } (create) | { task } (edit)
@@ -15,7 +21,26 @@ export default function Dashboard() {
   const [formError, setFormError] = useState('');
   const [deleting, setDeleting] = useState(null);
   const [deleteBusy, setDeleteBusy] = useState(false);
-  const [actionError, setActionError] = useState('');
+
+  const modalOpen = Boolean(form) || Boolean(deleting);
+  useFocusTrap(modalOpen);
+
+  // Shortcuts: "n" = new task, "/" = focus search. Ignored while typing or in a dialog.
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || modalOpen || isTyping(e.target)) return;
+      if (e.key === 'n') {
+        e.preventDefault();
+        setFormError('');
+        setForm({ task: null });
+      } else if (e.key === '/') {
+        e.preventDefault();
+        document.querySelector('input[aria-label="Search tasks"]')?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [modalOpen]);
 
   const openCreate = () => {
     setFormError('');
@@ -33,8 +58,13 @@ export default function Dashboard() {
     setSubmitting(true);
     setFormError('');
     try {
-      if (form.task) await t.updateTask(form.task.id, data);
-      else await t.createTask(data);
+      if (form.task) {
+        await t.updateTask(form.task.id, data);
+        toast.success('Task updated');
+      } else {
+        await t.createTask(data);
+        toast.success('Task created');
+      }
       setForm(null);
     } catch (err) {
       setFormError(err.message);
@@ -44,11 +74,11 @@ export default function Dashboard() {
   };
 
   const handleStatusChange = async (id, status) => {
-    setActionError('');
     try {
       await t.changeStatus(id, status);
+      toast.success('Status updated');
     } catch (err) {
-      setActionError(`Could not change status: ${err.message}`);
+      toast.error(`Could not change status: ${err.message}`);
     }
   };
 
@@ -56,11 +86,11 @@ export default function Dashboard() {
     setDeleteBusy(true);
     try {
       await t.removeTask(deleting.id);
-      setDeleting(null);
+      toast.success('Task deleted');
     } catch (err) {
-      setDeleting(null);
-      setActionError(`Could not delete task: ${err.message}`);
+      toast.error(`Could not delete task: ${err.message}`);
     } finally {
+      setDeleting(null);
       setDeleteBusy(false);
     }
   };
@@ -73,8 +103,6 @@ export default function Dashboard() {
         tasks={t.tasks}
         loading={t.loading}
         error={t.error}
-        actionError={actionError}
-        onDismissActionError={() => setActionError('')}
         onRetry={t.reload}
         onEdit={openEdit}
         onDelete={setDeleting}
