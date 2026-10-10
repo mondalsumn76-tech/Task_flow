@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { tempUser } from '../middleware/tempUser.js';
+import { protect } from '../middleware/auth.js';
 import { validateObjectId } from '../middleware/validateObjectId.js';
 import {
   createTask,
@@ -12,7 +12,7 @@ import {
 
 const router = Router();
 
-router.use(tempUser);
+router.use(protect);
 
 router.route('/').post(createTask).get(listTasks);
 
