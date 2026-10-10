@@ -30,7 +30,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 5: Create task API
 - [x] Day 6: Read, update, delete tasks
 - [x] Day 7: Authentication and security
-- [ ] Day 8: Frontend setup
+- [x] Day 8a: Client auth (Vite, Tailwind, AuthContext)
+- [ ] Day 8b: Dashboard and task UI
 
 ## Running the server
 
@@ -77,3 +78,11 @@ All `/api/v1/tasks` routes require a session. Each user only ever sees their own
 - Strict input validation (whitelisting, type checks, 10 KB body limit)
 - Centralized error handling: no stack traces or internals in responses
 - The server refuses to start without a strong `JWT_SECRET`
+
+## Running the client
+
+    cd client
+    npm install
+    npm run dev
+
+Open http://localhost:5173. In development, Vite proxies `/api` to the Express server on port 5000, so run both.
