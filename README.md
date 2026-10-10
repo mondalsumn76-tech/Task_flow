@@ -29,7 +29,8 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 4: Task model
 - [x] Day 5: Create task API
 - [x] Day 6: Read, update, delete tasks
-- [ ] Day 7: User model and authentication
+- [x] Day 7: Authentication and security
+- [ ] Day 8: Frontend setup
 
 ## Running the server
 
@@ -55,3 +56,24 @@ All task routes are scoped to the owner.
 | DELETE | `/api/v1/tasks/:id` | Delete a task |
 
 Example: `GET /api/v1/tasks?status=done&page=1&limit=10`
+
+## Authentication
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/auth/register` | Create an account and start a session |
+| POST | `/api/v1/auth/login` | Log in |
+| POST | `/api/v1/auth/logout` | Clear the session cookie |
+| GET | `/api/v1/auth/me` | Current user (requires login) |
+
+All `/api/v1/tasks` routes require a session. Each user only ever sees their own tasks.
+
+## Security
+
+- Passwords hashed with bcrypt (cost 12), never stored or returned in plaintext
+- JWT in an HTTP-only, SameSite cookie (Secure in production)
+- Helmet security headers, CORS restricted to the client origin
+- Rate limiting, with a stricter limit on login and register
+- Strict input validation (whitelisting, type checks, 10 KB body limit)
+- Centralized error handling: no stack traces or internals in responses
+- The server refuses to start without a strong `JWT_SECRET`
