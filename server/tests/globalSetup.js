@@ -4,7 +4,7 @@ let mongo;
 
 export async function setup({ provide }) {
   mongo = await MongoMemoryServer.create({ instance: { launchTimeout: 60000 } });
-  provide('mongoUri', mongo.getUri('taskflow_test'));
+  provide('mongoUri', mongo.getUri());
 }
 
 export async function teardown() {
