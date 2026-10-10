@@ -12,6 +12,7 @@ export const env = {
   mongodbUri: process.env.MONGODB_URI,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresDays: Number(process.env.JWT_EXPIRES_DAYS) || 7,
+  trustProxyHops: Number(process.env.TRUST_PROXY_HOPS) || 1,
 };
 
 // Called once at startup. A server with a missing or weak secret must not start.
