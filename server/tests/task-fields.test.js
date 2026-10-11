@@ -98,3 +98,21 @@ describe('filters and sorting', () => {
     expect((await list({ overdue: 'maybe' })).status).toBe(400);
   });
 });
+
+describe('due date with a time of day', () => {
+  it('stores and returns the exact timestamp', async () => {
+    const when = '2026-12-01T09:30:00.000Z';
+    const res = await create({ title: 'Meeting', dueDate: when });
+    expect(res.status).toBe(201);
+    expect(res.body.data.dueDate).toBe(when);
+  });
+});
+
+describe('due date with a time of day', () => {
+  it('stores and returns the exact timestamp', async () => {
+    const when = '2026-12-01T09:30:00.000Z';
+    const res = await create({ title: 'Meeting', dueDate: when });
+    expect(res.status).toBe(201);
+    expect(res.body.data.dueDate).toBe(when);
+  });
+});
