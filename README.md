@@ -117,3 +117,11 @@ The free-tier API sleeps when idle, so the first request can take up to a minute
 - **API:** Render (root `server`, `npm ci` / `npm start`), env: `NODE_ENV`, `MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL`, `TRUST_PROXY_HOPS=2`
 - **Client:** Vercel (root `client`), with `vercel.json` rewriting `/api/*` to the API so the auth cookie stays first-party
 - **Database:** MongoDB Atlas (`taskflow_prod`, with a user limited to that database)
+
+## Task fields and filters
+
+Each task can have a **due date**, a **priority** (P1 urgent to P4 none) and **tags**.
+
+Filter the list by due date (overdue, today, next 7 days, no date), priority, tag, status and search, and sort by due date or priority:
+
+    GET /api/v1/tasks?priority=1&tag=work&overdue=true&sortBy=dueDate&order=asc
