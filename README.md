@@ -34,7 +34,7 @@ A full-stack task management application built with the MERN stack.
 - [x] Day 8b: Dashboard and task UI
 - [x] Day 8c: Polish (dark mode, toasts, shortcuts, stats endpoint)
 - [x] Day 9: Automated tests and CI
-- [ ] Day 10: Deployment
+- [x] Day 10: Deployment (Render + Vercel + Atlas)
 
 ## Running the server
 
@@ -104,3 +104,16 @@ Open http://localhost:5173. In development, Vite proxies `/api` to the Express s
     cd client && npm test     # component and hook tests
 
 Tests run automatically on every push and pull request via GitHub Actions.
+
+## Live demo
+
+- App: https://task-flow-three-khaki.vercel.app/
+- API health: https://taskflow-api-sxgn.onrender.com/api/health
+
+The free-tier API sleeps when idle, so the first request can take up to a minute.
+
+## Deployment
+
+- **API:** Render (root `server`, `npm ci` / `npm start`), env: `NODE_ENV`, `MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL`, `TRUST_PROXY_HOPS=2`
+- **Client:** Vercel (root `client`), with `vercel.json` rewriting `/api/*` to the API so the auth cookie stays first-party
+- **Database:** MongoDB Atlas (`taskflow_prod`, with a user limited to that database)
