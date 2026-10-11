@@ -11,6 +11,8 @@ const sortOptions = [
   { value: 'createdAt', label: 'Date created' },
   { value: 'title', label: 'Title' },
   { value: 'updatedAt', label: 'Date updated' },
+  { value: 'dueDate', label: 'Due date' },
+  { value: 'priority', label: 'Priority' },
 ];
 
 function Toolbar({ search, onSearchChange, status, onStatusChange, sortBy, order, onSortChange }) {

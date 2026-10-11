@@ -10,9 +10,30 @@ const statusOptions = [
   { value: 'done', label: 'Done' },
 ];
 
+const priorityOptions = [
+  { value: '1', label: 'P1 Urgent' },
+  { value: '2', label: 'P2 High' },
+  { value: '3', label: 'P3 Medium' },
+  { value: '4', label: 'P4 None' },
+];
+
 const inputClass =
   'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-500';
 const labelClass = 'mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300';
+
+// The date input works in local "YYYY-MM-DD"; the API stores a full ISO timestamp.
+const toDateInput = (iso) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+const fromDateInput = (value) => (value ? new Date(`${value}T00:00:00`).toISOString() : null);
+const parseTags = (text) =>
+  text
+    .split(/[\s,]+/)
+    .map((t) => t.replace(/^#/, '').toLowerCase())
+    .filter(Boolean);
 
 function TaskForm({ initial, onSubmit, onCancel, submitting, error }) {
   const isEdit = !!initial;
@@ -21,6 +42,9 @@ function TaskForm({ initial, onSubmit, onCancel, submitting, error }) {
   const [title, setTitle] = useState(initial?.title ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
   const [status, setStatus] = useState(initial?.status ?? 'todo');
+  const [priority, setPriority] = useState(String(initial?.priority ?? 4));
+  const [dueDate, setDueDate] = useState(toDateInput(initial?.dueDate));
+  const [tagsText, setTagsText] = useState((initial?.tags ?? []).join(' '));
 
   useEffect(() => {
     titleRef.current?.focus();
@@ -37,7 +61,14 @@ function TaskForm({ initial, onSubmit, onCancel, submitting, error }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (submitting) return;
-    onSubmit({ title: title.trim(), description: description.trim(), status });
+    onSubmit({
+      title: title.trim(),
+      description: description.trim(),
+      status,
+      priority: Number(priority),
+      dueDate: fromDateInput(dueDate),
+      tags: parseTags(tagsText),
+    });
   }
 
   const titleEmpty = title.trim().length === 0;
@@ -49,7 +80,7 @@ function TaskForm({ initial, onSubmit, onCancel, submitting, error }) {
       aria-modal="true"
       aria-labelledby="task-form-title"
     >
-      <div className="w-full max-w-lg rounded-t-2xl bg-white shadow-2xl dark:bg-slate-800 sm:rounded-2xl">
+      <div className="max-h-[95vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white shadow-2xl dark:bg-slate-800 sm:rounded-2xl">
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-slate-700">
           <h2 id="task-form-title" className="text-base font-semibold text-slate-900 dark:text-slate-100">
             {isEdit ? 'Edit task' : 'New task'}
@@ -113,30 +144,78 @@ function TaskForm({ initial, onSubmit, onCancel, submitting, error }) {
               value={description}
               onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESC))}
               maxLength={MAX_DESC}
-              rows={4}
+              rows={3}
               disabled={submitting}
               placeholder="Add more detail..."
               className={`${inputClass} resize-none`}
             />
           </div>
 
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div>
+              <label htmlFor="task-status" className={labelClass}>
+                Status
+              </label>
+              <select
+                id="task-status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                disabled={submitting}
+                className={`${inputClass} cursor-pointer`}
+              >
+                {statusOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="task-priority" className={labelClass}>
+                Priority
+              </label>
+              <select
+                id="task-priority"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+                disabled={submitting}
+                className={`${inputClass} cursor-pointer`}
+              >
+                {priorityOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="task-due" className={labelClass}>
+                Due date
+              </label>
+              <input
+                id="task-due"
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                disabled={submitting}
+                className={inputClass}
+              />
+            </div>
+          </div>
+
           <div>
-            <label htmlFor="task-status" className={labelClass}>
-              Status
+            <label htmlFor="task-tags" className={labelClass}>
+              Tags
             </label>
-            <select
-              id="task-status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+            <input
+              id="task-tags"
+              type="text"
+              value={tagsText}
+              onChange={(e) => setTagsText(e.target.value)}
               disabled={submitting}
-              className={`${inputClass} cursor-pointer`}
-            >
-              {statusOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              placeholder="work home (separate with spaces or commas)"
+              className={inputClass}
+            />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">

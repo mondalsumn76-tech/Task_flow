@@ -1,5 +1,6 @@
 import { Pencil, Trash2 } from 'lucide-react';
 import StatusBadge from './StatusBadge.jsx';
+import TaskMeta from './TaskMeta.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'short',
@@ -35,6 +36,7 @@ function TaskItem({ task, onStatusChange, onEdit, onDelete }) {
           {task.description && (
             <p className="mt-1 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">{task.description}</p>
           )}
+          <TaskMeta task={task} />
           <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
             Created {dateFormatter.format(new Date(task.createdAt))}
           </p>
