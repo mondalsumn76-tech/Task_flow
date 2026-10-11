@@ -4,6 +4,9 @@ export const toTaskResponse = (task) => ({
   title: task.title,
   description: task.description,
   status: task.status,
+  priority: task.priority,
+  dueDate: task.dueDate,
+  tags: task.tags,
   createdAt: task.createdAt,
   updatedAt: task.updatedAt,
 });
