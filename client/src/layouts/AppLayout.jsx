@@ -4,7 +4,7 @@ import ThemeToggle from '../components/ThemeToggle.jsx';
 
 const links = [
   { to: '/dashboard', label: 'Dashboard' },
-  { to: '/tasks', label: 'Tasks' },
+  { to: '/tasks', label: 'Board' },
 ];
 
 const linkClass = ({ isActive }) =>
