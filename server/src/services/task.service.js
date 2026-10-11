@@ -9,12 +9,31 @@ const notFound = () => new AppError('Task not found', 404);
 // "user" is set LAST so input data can never override the owner.
 export const createTask = (userId, data) => Task.create({ ...data, user: userId });
 
-export const listTasks = async (userId, { status, search, page, limit, sortBy, order }) => {
+export const listTasks = async (
+  userId,
+  { status, search, priority, tag, dueFrom, dueTo, overdue, noDue, page, limit, sortBy, order }
+) => {
   const filter = { user: userId };
   if (status) filter.status = status;
+
   if (search) {
     const pattern = new RegExp(escapeRegex(search), 'i');
     filter.$or = [{ title: pattern }, { description: pattern }];
+  }
+
+  // Priority 4 means "none", which older tasks may not have stored at all
+  if (priority) filter.priority = priority === 4 ? { $in: [4, null] } : priority;
+  if (tag) filter.tags = tag;
+
+  if (noDue) {
+    filter.dueDate = null; // matches null and missing
+  } else if (overdue) {
+    filter.dueDate = { $lt: new Date() };
+    if (!status) filter.status = { $ne: 'done' }; // finished tasks are never overdue
+  } else if (dueFrom || dueTo) {
+    filter.dueDate = {};
+    if (dueFrom) filter.dueDate.$gte = dueFrom;
+    if (dueTo) filter.dueDate.$lt = dueTo;
   }
 
   const [tasks, total] = await Promise.all([

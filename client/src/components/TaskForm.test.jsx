@@ -20,7 +20,7 @@ describe('TaskForm', () => {
     await userEvent.type(screen.getByLabelText(/title/i), '  Buy milk  ');
     await userEvent.click(screen.getByRole('button', { name: /create task/i }));
 
-    expect(onSubmit).toHaveBeenCalledWith({ title: 'Buy milk', description: '', status: 'todo' });
+    expect(onSubmit).toHaveBeenCalledWith({ title: 'Buy milk', description: '', status: 'todo', priority: 4, dueDate: null, tags: [] });
   });
 
   it('prefills and says "Edit task" when editing', () => {

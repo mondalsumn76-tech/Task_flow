@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { taskService } from '../services/api.js';
+import { dueFilterParams } from '../utils/dateRanges.js';
 import useDebounce from './useDebounce.js';
 
 const LIMIT = 10;
@@ -11,8 +12,12 @@ export default function useTasks() {
     sortBy: 'createdAt',
     order: 'desc',
     page: 1,
+    due: 'all',
+    priority: 'all',
+    tag: '',
   });
   const debouncedSearch = useDebounce(filters.search, 350);
+  const debouncedTag = useDebounce(filters.tag, 350);
 
   const [tasks, setTasks] = useState([]);
   const [meta, setMeta] = useState({ total: 0, totalPages: 0 });
@@ -21,7 +26,7 @@ export default function useTasks() {
   const [error, setError] = useState('');
   const requestId = useRef(0);
 
-  const { filter, sortBy, order, page } = filters;
+  const { filter, sortBy, order, page, due, priority } = filters;
 
   // Only the newest request may update state, so a slow old response
   // can never overwrite a newer one (race condition guard).
@@ -38,6 +43,9 @@ export default function useTasks() {
           search: debouncedSearch.trim() || undefined,
           sortBy,
           order,
+          priority: priority === 'all' ? undefined : priority,
+          tag: debouncedTag.trim().replace(/^#/, '').toLowerCase() || undefined,
+          ...dueFilterParams(due),
         });
         if (id !== requestId.current) return;
         setTasks(res.data);
@@ -49,7 +57,7 @@ export default function useTasks() {
         if (id === requestId.current) setLoading(false);
       }
     },
-    [page, filter, debouncedSearch, sortBy, order]
+    [page, filter, debouncedSearch, sortBy, order, due, priority, debouncedTag]
   );
 
   const loadStats = useCallback(async () => {
@@ -78,10 +86,13 @@ export default function useTasks() {
   );
 
   // Filter setters reset to page 1, otherwise you could sit on an empty page 5
-  const setSearch = (search) => setFilters((f) => ({ ...f, search, page: 1 }));
-  const setFilter = (next) => setFilters((f) => ({ ...f, filter: next, page: 1 }));
-  const setSort = (nextSortBy, nextOrder) =>
-    setFilters((f) => ({ ...f, sortBy: nextSortBy, order: nextOrder, page: 1 }));
+  const update = (patch) => setFilters((f) => ({ ...f, ...patch, page: 1 }));
+  const setSearch = (search) => update({ search });
+  const setFilter = (next) => update({ filter: next });
+  const setSort = (nextSortBy, nextOrder) => update({ sortBy: nextSortBy, order: nextOrder });
+  const setDue = (next) => update({ due: next });
+  const setPriority = (next) => update({ priority: next });
+  const setTag = (next) => update({ tag: next });
   const setPage = (next) => setFilters((f) => ({ ...f, page: next }));
 
   // Mutations throw on failure, so the caller can show the message
@@ -130,6 +141,9 @@ export default function useTasks() {
     setSearch,
     setFilter,
     setSort,
+    setDue,
+    setPriority,
+    setTag,
     setPage,
     createTask,
     updateTask,
