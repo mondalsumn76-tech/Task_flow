@@ -133,3 +133,7 @@ The **Board** page shows tasks in To do, In progress and Done columns. Drag a ca
 ## Board view
 
 The **Board** page shows tasks in To do, In progress and Done columns. Drag a card by its grip to change its status, or use the **Move to** menu on the card (keyboard and touch friendly). Moves update instantly and roll back if the server rejects them.
+
+## Board view
+
+The **Board** page shows tasks in To do, In progress and Done columns. Drag a card by its grip to change its status, or use the **Move to** menu on the card (keyboard and touch friendly). Moves update instantly and roll back if the server rejects them.
