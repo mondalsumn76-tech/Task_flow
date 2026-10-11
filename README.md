@@ -125,3 +125,7 @@ Each task can have a **due date**, a **priority** (P1 urgent to P4 none) and **t
 Filter the list by due date (overdue, today, next 7 days, no date), priority, tag, status and search, and sort by due date or priority:
 
     GET /api/v1/tasks?priority=1&tag=work&overdue=true&sortBy=dueDate&order=asc
+
+## Board view
+
+The **Board** page shows tasks in To do, In progress and Done columns. Drag a card by its grip to change its status, or use the **Move to** menu on the card (keyboard and touch friendly). Moves update instantly and roll back if the server rejects them.
